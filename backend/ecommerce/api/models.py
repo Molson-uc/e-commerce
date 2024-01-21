@@ -1,20 +1,22 @@
-from collections.abc import Iterable
-from django.urls import reverse
+from django.utils.text import slugify
 from django.db import models
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import SimpleUploadedFile
 import os
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
 
 
 class Category(models.Model):
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, db_index=True, unique=True)
 
     def __str__(self) -> str:
         return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class Product(models.Model):
@@ -22,19 +24,19 @@ class Product(models.Model):
         Category, related_name="products", on_delete=models.CASCADE
     )
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, db_index=True, unique=True)
     image = models.ImageField(upload_to="products/%Y/%m/%d", blank=False)
     thumbnail = models.ImageField(
         upload_to="products/tb/%Y/%m/%d", blank=False, editable=False
     )
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    available = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        if not self.slug:
+            self.slug = slugify(self.name)
+
         self.create_thumbnail()
 
     def create_thumbnail(self):
