@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, filters
-
+from .permissions import IsStaffPersmission
 from .models import Product
 from .serializers import (
     ProductListSerializer,
@@ -28,3 +28,10 @@ class ProductDetail(generics.RetrieveAPIView):
 class ProductCreate(generics.CreateAPIView):
     serializer_class = ProductCreateSerializer
     queryset = Product.objects.all()
+    permission_classes = [IsStaffPersmission]
+
+
+class ProductUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ProductCreateSerializer
+    queryset = Product.objects.all()
+    lookup_field = "slug"

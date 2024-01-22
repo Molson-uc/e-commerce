@@ -53,3 +53,6 @@ class Product(models.Model):
             thumbnail_file = SimpleUploadedFile(thumbnail_name, thumbnail_io.getvalue())
             self.thumbnail.save(thumbnail_file.name, thumbnail_file, save=False)
             super().save()
+
+    def __str__(self):
+        return self.name
