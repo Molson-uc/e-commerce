@@ -1,9 +1,8 @@
-from django.utils.text import slugify
-from django.db import models
+import os
 from PIL import Image
 from io import BytesIO
+from django.db import models
 from django.core.files.uploadedfile import SimpleUploadedFile
-import os
 
 
 class Category(models.Model):
@@ -13,18 +12,13 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
 
 class Product(models.Model):
     category = models.ForeignKey(
         Category, related_name="products", on_delete=models.CASCADE
     )
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True, unique=True)
+    slug = models.SlugField(max_length=200, db_index=True)
     image = models.ImageField(upload_to="products/%Y/%m/%d", blank=False)
     thumbnail = models.ImageField(
         upload_to="products/tb/%Y/%m/%d", blank=False, editable=False
@@ -34,9 +28,6 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if not self.slug:
-            self.slug = slugify(self.name)
-
         self.create_thumbnail()
 
     def create_thumbnail(self):

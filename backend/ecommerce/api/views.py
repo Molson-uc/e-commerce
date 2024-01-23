@@ -1,7 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-
-from django.shortcuts import render, get_object_or_404
-from rest_framework import generics, filters
+from rest_framework import generics, filters, parsers
 from .permissions import IsStaffPersmission
 from .models import Product
 from .serializers import (
@@ -11,7 +9,7 @@ from .serializers import (
 )
 
 
-class ProductList(generics.ListAPIView):
+class ProductListView(generics.ListAPIView):
     serializer_class = ProductListSerializer
     queryset = Product.objects.all()
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
@@ -19,19 +17,21 @@ class ProductList(generics.ListAPIView):
     filterset_fields = ["name", "category", "description", "price"]
 
 
-class ProductDetail(generics.RetrieveAPIView):
+class ProductDetailView(generics.RetrieveAPIView):
     serializer_class = ProductDetailSerializer
     queryset = Product.objects.all()
-    lookup_field = "slug"
+    lookup_field = "pk"
 
 
-class ProductCreate(generics.CreateAPIView):
+class ProductCreateView(generics.CreateAPIView):
     serializer_class = ProductCreateSerializer
     queryset = Product.objects.all()
     permission_classes = [IsStaffPersmission]
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
 
 
-class ProductUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+class ProductUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductCreateSerializer
     queryset = Product.objects.all()
-    lookup_field = "slug"
+    lookup_field = "pk"
+    permission_classes = [IsStaffPersmission]

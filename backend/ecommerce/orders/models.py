@@ -1,4 +1,3 @@
-from collections.abc import Iterable
 from datetime import timedelta
 from django.db import models
 from django.utils import timezone
@@ -24,9 +23,6 @@ class Order(models.Model):
     def get_total_cost(self):
         total_cost = sum(item.get_cost() for item in self.items.all())
         return total_cost
-
-    def save(self, *args, **kwargs):
-        return super().save(*args, **kwargs)
 
 
 class OrderItem(models.Model):

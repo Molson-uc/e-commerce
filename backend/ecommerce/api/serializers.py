@@ -33,8 +33,8 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         category = validated_data.pop("category")
-        foreign_key_instance = Category.objects.create(**category)
+        foreign_key_instance, created = Category.objects.get_or_create(**category)
         instance = Product.objects.create(
-            category=foreign_key_instance, **validated_data
+            **validated_data, category=foreign_key_instance
         )
         return instance

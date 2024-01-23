@@ -5,11 +5,11 @@ from .models import Category, Product
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name"]
-    prepopulated_fields = {"slug": ("name",)}
+    exclude = ("slug",)
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "slug", "price"]
+    list_display = ["name", "price"]
     list_editable = ["price"]
-    prepopulated_fields = {"slug": ("name",)}
+    exclude = ("slug",)

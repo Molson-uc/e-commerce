@@ -48,13 +48,10 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         orders_data = validated_data.pop("items")
-        print(f"heloo: {orders_data}")
         order = Order.objects.create(**validated_data)
-        print(f"order:  {order}")
 
         for order_data in orders_data:
             OrderItem.objects.create(order=order, **order_data)
-
         return order
 
     def update(self, instance, validated_data):
@@ -67,7 +64,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
                 order.product = order_data.get("product", order.product)
                 order.quantity = order_data.get("quantity", order.quantity)
                 order.save()
-
         return instance
 
 

@@ -1,10 +1,10 @@
 from django.urls import path, include
-from .views import OrderList, OrderCreate, OrderUpdate
+from .views import OrderListView, OrderCreateView, OrderUpdateView
 
 app_name = "orders"
 
 urlpatterns = [
-    path("list/", OrderList.as_view(), name="order-list"),
-    path("create/", OrderCreate.as_view(), name="order-create"),
-    path("update/", OrderUpdate.as_view(), name="order-update"),
+    path("list/", OrderListView.as_view(), name="order-list"),
+    path("create/", OrderCreateView.as_view(), name="order-create"),
+    path("update/", OrderUpdateView.as_view(), name="order-update"),
 ]
