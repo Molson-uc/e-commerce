@@ -4,6 +4,7 @@ from .views import (
     ProductDetailView,
     ProductCreateView,
     ProductUpdateDeleteView,
+    TopProductsView,
 )
 
 app_name = "api"
@@ -13,4 +14,5 @@ urlpatterns = [
     path("detail/<int:pk>/", ProductDetailView.as_view(), name="product-detail"),
     path("create/", ProductCreateView.as_view(), name="product-create"),
     path("update/<int:pk>/", ProductUpdateDeleteView.as_view(), name="product-update"),
+    path("top/", TopProductsView.as_view(), name="top_products"),
 ]

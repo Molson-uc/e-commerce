@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from orders.models import Order
 from .models import Product, Category
 
 
@@ -38,3 +39,10 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             **validated_data, category=foreign_key_instance
         )
         return instance
+
+
+# class OrderSerializer(serializers.Serializer):
+#     start_date = serializers.DateTimeField()
+#     end_date = serializers.DateTimeField()
+#     num_products = serializers.IntegerField()
+#     product = serializers.CharField(source="c")
