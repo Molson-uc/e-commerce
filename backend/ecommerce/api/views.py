@@ -52,7 +52,6 @@ class TopProductsView(APIView):
     permission_classes = [IsStaffPersmission]
 
     def get(self, request):
-        # Pobierz dane wejściowe z parametrów zapytania
         start_date = request.query_params.get("start_date")
         end_date = request.query_params.get("end_date")
         num_products = request.query_params.get("num_products", 5)
@@ -73,7 +72,6 @@ class TopProductsView(APIView):
             .order_by("-total_quantity")[:num_products]
         )
 
-        # Przygotuj dane wyjściowe
         result = []
         for product in top_products:
             result.append(
