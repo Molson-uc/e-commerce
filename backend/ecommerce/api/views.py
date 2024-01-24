@@ -49,6 +49,8 @@ class ProductUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TopProductsView(APIView):
+    permission_classes = [IsStaffPersmission]
+
     def get(self, request):
         # Pobierz dane wejściowe z parametrów zapytania
         start_date = request.query_params.get("start_date")
